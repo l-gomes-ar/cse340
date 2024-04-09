@@ -3,4 +3,161 @@
 *:before,
 *:after {
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+:root {
+  --accent-color: rgb(0, 70, 136);
+}
+
+/* ********************* *
+ * base style (small view)
+ *********************** */
+
+/* Styles for fonts */
+.cse-motors a,
+#tools a,
+nav li {
+  font-family: Verdana, sans-serif;
+  font-weight: 700;
+}
+
+h1,
+h2,
+h3 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 16pt;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.hero section p {
+  font-size: 13pt;
+  font-weight: 600;
+}
+
+/* Styles for header */
+#top-header {
+  position: relative;
+  padding: 2rem .5rem;
+}
+
+.cse-motors a,
+#tools a {
+  text-decoration: none;
+  color: black;
+}
+.cse-motors a {
+  font-size: 22pt;
+}
+
+#tools {
+  right: 1rem;
+  top: 2rem;
+  position: absolute;
+}
+
+/* Styles for nav bar */
+nav {
+  color: white;
+  background-color: black;
+}
+
+nav ul {
+  display: flex;
+  justify-content: space-around;
+}
+
+nav li {
+  padding: 1rem 0;
+  list-style: none;
+  text-align: center;
+  font-size: 11pt;
+  width: 100%;
+}
+
+nav li:hover {
+  background-color: rgba(255, 255, 255, .2);
+  cursor: pointer;
+}
+
+/* Styles for hero and main */
+main {
+  margin: 2rem auto;
+  padding: .5rem;
+  width: 320px;
+}
+
+.hero {
+  position: relative;
+  margin: 1rem auto;
+}
+
+.hero img {
+  width: 100%;
+  height: auto;
+}
+
+.hero section {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, .5);
+  color: var(--accent-color);
+}
+
+.hero section a {
+  display: block;
+  background-color: var(--accent-color);
+  color: white;
+  padding: .75rem;
+  font-size: 14pt;
+  font-weight: 700;
+  border: 1px solid white;
+  text-decoration: none;
+  width: fit-content;
+  margin-top: 1rem;
+}
+
+/* Style for Delorian Reviews */
+.delorian-reviews {
+  margin-bottom: 1rem;
+}
+
+.delorian-reviews ul {
+  padding: 1rem;
+}
+
+.delorian-reviews li {
+  margin-bottom: .5rem;
+}
+
+/* Styles for Delorean Upgrades */
+.delorian-upgrades .grid-container {
+  margin-top: 1rem;
+  text-align: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.delorian-upgrades img {
+  height: 4rem;
+  width: auto;
+}
+
+.delorian-upgrades .container {
+  width: 100%;
+  height: 5rem;
+  border: 1px solid black;
+  background-color: var(--accent-color);
+}
+
+/* Styles for footer */
+footer {
+  font-weight: 700;
+  margin: 0 0 1rem 1rem;
 }
