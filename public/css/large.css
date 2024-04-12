@@ -36,18 +36,28 @@
 
     /* Page Sizing Style */
     main {
-        width: 758px;
+        width: auto;
     }
 
     .hero {
         width: 600px;
     }
 
-    /* Flexbox Styles */
+    /* Home Flexbox Styles */
     .flexbox-container {
         display: flex;
         flex-direction: row-reverse;
         justify-content: space-between;
         align-items: center;
     }
+
+    /* Inventory Display Styles */
+    #inv-display {
+        margin-top: 1rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+
+    #inv-display li { margin-top: 0; }
 }

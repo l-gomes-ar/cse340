@@ -62,8 +62,16 @@ body {
 
 /* Styles for nav bar */
 nav {
-  color: white;
   background-color: black;
+}
+
+nav a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 1rem 0;
+  font-size: 11pt;
+  width: 100%;
 }
 
 nav ul {
@@ -72,14 +80,12 @@ nav ul {
 }
 
 nav li {
-  padding: 1rem 0;
   list-style: none;
   text-align: center;
-  font-size: 11pt;
   width: 100%;
 }
 
-nav li:hover {
+nav a:hover {
   background-color: rgba(255, 255, 255, .2);
   cursor: pointer;
 }
@@ -160,4 +166,30 @@ main {
 footer {
   font-weight: 700;
   margin: 0 0 1rem 1rem;
+}
+
+/* Styles for Inventory Display */
+#inv-display {
+  list-style: none;
+}
+
+#inv-display li {
+  text-align: center;
+  border: 2px solid var(--accent-color);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#inv-display li:hover {
+  background-color: rgba(0, 70, 136, .2);
+  cursor: pointer;
+}
+
+.namePrice a {
+  text-decoration: none;
+  color: var(--accent-color);
 }
