@@ -13,7 +13,7 @@ Util.getNav = async function (req, res, next) {
         list +=
             '<a href="/inv/type/' +
             row.classification_id +
-            '"title="See our inventory of ' +
+            '" title="See our inventory of ' +
             row.classification_name +
             ' vehicles">' +
             row.classification_name +
@@ -53,6 +53,30 @@ Util.buildClassificationGrid = async function(data) {
         grid += '</ul>'
     } else {
         grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>'
+    }
+    return grid
+}
+
+/* ***********************
+ * Build the details view HTML
+ * *********************** */
+Util.buildDetailsGrid = async function(data) {
+    let grid
+    if (typeof data == "object") {
+        grid = `<div class="detailsView">
+                    <img src="${data.inv_image}" alt="${data.inv_name} Full Picture">
+                    <div>
+                    <h2>${data.inv_name} Details</h2>
+                        <ul>
+                            <li><b>Price: $${new Intl.NumberFormat('en-US').format(data.inv_price)}</b></li>
+                            <li><b>Description:</b> ${data.inv_description}</li>
+                            <li><b>Color:</b> ${data.inv_color}</li>
+                            <li><b>Miles:</b> ${new Intl.NumberFormat('en-US').format(data.inv_miles)}</li>
+                        </ul>
+                    </div>
+                </div>`
+    } else {
+        grid = '<p class="notice">Sorry, no details found for this vehicle</p>'
     }
     return grid
 }

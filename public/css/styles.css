@@ -198,3 +198,31 @@ footer {
   height: auto;
   border-radius: 10px;
 }
+
+/* Styles for Details View */
+.detailsView {
+  margin-top: 1rem;
+}
+
+.detailsView img {
+  width: 100%;
+  height: auto;
+}
+
+.detailsView ul {
+  list-style: none;
+  padding: .5rem;
+}
+
+.detailsView div {
+  margin-top: 1rem;
+  padding: 0 1rem 1rem;
+}
+
+.detailsView li {
+  padding: 1rem;
+}
+
+.detailsView li:nth-child(odd) {
+  background-color: rgb(230, 230, 230);
+}

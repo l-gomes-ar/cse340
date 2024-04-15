@@ -61,4 +61,15 @@
     }
 
     #inv-display li { margin-top: 0; }
+
+    /* Styles for Details View */
+    .detailsView {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        padding: 0 1rem;
+    }
+
+    .detailsView div {
+        margin-top: 0;
+    }
 }
