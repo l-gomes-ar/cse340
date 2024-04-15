@@ -171,17 +171,16 @@ footer {
 /* Styles for Inventory Display */
 #inv-display {
   list-style: none;
+  width: 200px;
+  margin: 0 auto;
 }
 
 #inv-display li {
   text-align: center;
   border: 2px solid var(--accent-color);
   border-radius: 10px;
-  padding: 1rem;
+  padding-bottom: 1rem;
   margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 }
 
 #inv-display li:hover {
@@ -192,4 +191,10 @@ footer {
 .namePrice a {
   text-decoration: none;
   color: var(--accent-color);
+}
+
+#inv-display img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
 }
