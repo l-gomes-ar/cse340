@@ -226,3 +226,110 @@ footer {
 .detailsView li:nth-child(odd) {
   background-color: rgb(230, 230, 230);
 }
+
+/* Styles for Login and Register form */
+.form-field {
+  margin-top: 2rem;
+  background-color: rgba(0, 0, 0, 0.87);
+  border: 2px solid black;
+  border-radius: 15px;
+  padding: 2rem;
+  color: white;
+  box-shadow: 5px 6px 15px black;
+}
+
+.form-field label,
+.form-field input {
+  display: block;
+  width: 100%;
+}
+
+.form-field input {
+  margin-bottom: .5rem;
+  font-size: 1rem;
+  padding: .3rem;
+}
+
+.form-field input[type="submit"] {
+  width: 6rem;
+  margin: 1rem auto;
+  cursor: pointer;
+  border-radius: 20px;
+  background-color: white;
+}
+
+.form-field p {
+  text-align: center;
+  font-size: 16pt;
+}
+
+.form-field a {
+  color: white;
+  font-weight: 700;
+}
+
+.form-field h2 {
+  margin-bottom: 1rem;
+}
+
+.form-field hr {
+  margin: 1rem 0;
+}
+
+.form-field label.pw {
+  position: relative;
+}
+
+label.pw::before,
+.form-field div span:before {
+  content: '*';
+  color: red;
+}
+
+#showPw {
+  text-align: center;
+  font-weight: 700;
+  color: black;
+  border: 2px solid black;
+  width: 4rem;
+  position: absolute;
+  bottom: .2rem;
+  right: .3rem;
+  font-size: 12pt;
+  cursor: pointer;
+}
+
+#showPw:hover {
+  background-color: black;
+  color: white;
+}
+
+/* Styles for flash messages */
+.notice {
+  background-color: rgba(0, 0, 255, 0.295);
+  border: 1px solid rgb(0, 0, 90);
+  color: rgb(0, 0, 90);
+}
+
+.success {
+  background-color: rgba(0, 255, 0, 0.295);
+  border: 1px solid rgb(0, 90, 0);
+  color: rgb(0, 90, 0);
+}
+
+.error {
+  background-color: rgba(255, 0, 0, 0.295);
+  border: 1px solid rgb(90, 0, 0);
+  color: rgb(90, 0, 0);
+}
+
+.notice,
+.success,
+.error {
+  width: 100%;
+  text-align: center;
+  padding: .5rem;
+  margin: 1rem 0;
+  list-style: none;
+  border-radius: 5px;
+}
