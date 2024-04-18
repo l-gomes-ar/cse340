@@ -7,10 +7,19 @@
 
 <!-- Message -->
 <%- messages() %>
+<% if (errors) { %>
+    <ul class="error">
+    <% errors.array().forEach(error => { %>
+        <% if (error.msg !== "Invalid value") { %>
+        <li><%= error.msg %></li>
+        <% } %>
+    <% }) %>
+    </ul>
+<% } %> 
 
 <div class="form-field">
-    <form method="post">
-        <label>Email:<input type="email" name="account_email" required></label>
+    <form method="post" action="/account/login">
+        <label>Email:<input type="email" name="account_email" required value="<%= locals.account_email %>"></label>
         <label class="pw">Password:<input id="pwInput" type="password" name="account_password" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"><span id="showPw">Show</span></label>
         <input type="submit" value="LOGIN">
     </form>
