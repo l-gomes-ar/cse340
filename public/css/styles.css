@@ -227,7 +227,7 @@ footer {
   background-color: rgb(230, 230, 230);
 }
 
-/* Styles for Login and Register form */
+/* Styles for form fields */
 .form-field {
   margin-top: 2rem;
   background-color: rgba(0, 0, 0, 0.87);
@@ -239,19 +239,24 @@ footer {
 }
 
 .form-field label,
-.form-field input {
+.form-field input,
+.form-field textarea,
+.form-field select {
   display: block;
   width: 100%;
 }
 
-.form-field input {
+.form-field input,
+.form-field textarea,
+.form-field select {
   margin-bottom: .5rem;
   font-size: 1rem;
   padding: .3rem;
 }
 
 .form-field input[type="submit"] {
-  width: 6rem;
+  width: 8rem;
+  font-weight: 700;
   margin: 1rem auto;
   cursor: pointer;
   border-radius: 20px;
@@ -304,6 +309,24 @@ label.pw::before,
   color: white;
 }
 
+/* Styles for form validation */
+input:valid:not(input[type="submit"]):focus,
+textarea:valid:focus {
+  background-color: lightgreen;
+}
+
+input:invalid:not(input[type="submit"]):focus,
+textarea:invalid:focus {
+  background-color: lightcoral;
+  color: darkred;
+}
+
+input:invalid:not(input[type="submit"]):focus::placeholder,
+textarea:invalid:focus::placeholder {
+  color: darkred;
+}
+
+
 /* Styles for flash messages */
 .notice {
   background-color: rgba(0, 0, 255, 0.295);
@@ -332,4 +355,22 @@ label.pw::before,
   margin: 1rem 0;
   list-style: none;
   border-radius: 5px;
+}
+
+/* Styles for management view */
+.management-links {
+  background-color: rgba(0, 0, 0, .9);
+  margin: 1rem;
+}
+
+.management-links a {
+  padding: .5rem;
+  color: white;
+  display: block;
+  font-size: 14pt;
+  text-decoration: none;
+}
+
+.management-links a:hover {
+  background-color: rgba(255, 255, 255, .3);
 }
