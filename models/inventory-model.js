@@ -8,6 +8,14 @@ async function getClassifications() {
 }
 
 /* **************************
+ * Get classification name by id
+ * ************************** */
+async function getClassificationById(classification_id) {
+    let data = await pool.query("SELECT classification_name FROM public.classification WHERE classification_id = $1", [classification_id])
+    return data.rows
+}
+
+/* **************************
  * Get all inventory items and classification_name by classification_id
  * ************************** */
 async function getInventoryByClassificationId(classification_id) {
@@ -93,4 +101,4 @@ async function addInventory(classification_id, inv_make, inv_model, inv_descript
     }
 }
 
-module.exports = { getClassifications, getInventoryByClassificationId, getDetailsByInvId, addClassification, addInventory }
+module.exports = { getClassifications, getClassificationById, getInventoryByClassificationId, getDetailsByInvId, addClassification, addInventory }
