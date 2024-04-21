@@ -1,0 +1,20 @@
+<!-- Heading -->
+<% if (title) { %>
+    <h1><%= title %></h1>
+<% } else {
+    res.redirect('/')
+} %>
+
+<!-- Message -->
+<%- messages() %>
+<% if (errors) { %>
+    <ul class="error">
+    <% errors.array().forEach(error => { %>
+        <% if (error.msg !== "Invalid value") { %>
+        <li><%= error.msg %></li>
+        <% } %>
+    <% }) %>
+    </ul>
+<% } %> 
+
+<h2>You're logged in</h2>

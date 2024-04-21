@@ -24,9 +24,14 @@ router.post(
     "/login",
     validate.loginRules(),
     validate.checkLoginData,
-    (req, res) => {
-        res.status(200).send('login process')
-    }
+    util.handleErrors(accountController.accountLogin)
+)
+
+// Route to account management
+router.get(
+    "/",
+    util.checkLogin,
+    util.handleErrors(accountController.buildAccountManagement)
 )
 
 module.exports = router
