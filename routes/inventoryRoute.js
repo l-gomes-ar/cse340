@@ -41,10 +41,20 @@ router.get("/edit/:inventory_id", util.handleErrors(invController.buildEditInven
 
 // Route for sending data to edit inventory
 router.post(
-    "/update/",
+    "/edit/:inventory_id",
     validate.newinventoryRules(),
     validate.checkUpdateData,
     util.handleErrors(invController.updateInventory)
+)
+
+// Route for confirmation of deleting inventory
+router.get("/delete/:inventory_id", util.handleErrors(invController.buildDeleteInventory))
+
+// Route for deleting inventory
+router.post(
+    "/delete/:inventory_id",
+    validate.checkDeleteData,
+    util.handleErrors(invController.deleteInventory)
 )
 
 // Route to get inventory as JSON

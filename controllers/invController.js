@@ -189,7 +189,6 @@ invCont.buildEditInventory = async function (req, res, next) {
     let inventoryId = parseInt(req.params.inventory_id)
     let nav = await utilities.getNav()
     let inventoryData = await invModel.getDetailsByInvId(inventoryId)
-    console.log(inventoryData)
     let inventoryName = `${inventoryData.inv_make} ${inventoryData.inv_model}`
     const classificationList = await utilities.buildClassificationList(inventoryData.classification_id)
     res.render("./inventory/edit-inventory", {
@@ -271,6 +270,54 @@ invCont.updateInventory = async function (req, res, next) {
             inv_color,
             inv_id
         })
+    }
+}
+
+/* **********************************
+ * Build view for confirmation of deleting inventory 
+ * ********************************** */
+invCont.buildDeleteInventory = async function (req, res, next) {
+    let inventoryId = parseInt(req.params.inventory_id)
+    let nav = await utilities.getNav()
+    let inventoryData = await invModel.getDetailsByInvId(inventoryId)
+    let inventoryName = `${inventoryData.inv_make} ${inventoryData.inv_model}`
+    const classificationList = await utilities.buildClassificationList(inventoryData.classification_id)
+    res.render("./inventory/delete-confirm", {
+        title: "Delete " + inventoryName,
+        nav,
+        errors: null,
+        classificationList,
+        inv_id: inventoryData.inv_id,
+        inv_make: inventoryData.inv_make,
+        inv_model: inventoryData.inv_model,
+        inv_year: inventoryData.inv_year,
+        inv_price: inventoryData.inv_price,
+    })
+}
+
+/* ************************
+ * Delete inventory
+ * ************************ */
+invCont.deleteInventory = async function (req, res, next) {
+    const {
+        inv_id,
+        inv_make,
+        inv_model
+    } = req.body
+    let invId = parseInt(inv_id)
+
+    const deleteResult = await invModel.deleteInventory(
+        invId
+    )
+
+    const inventoryName = `${inv_make} ${inv_model}`
+
+    if (deleteResult) {
+        req.flash("success", `${inventoryName} successfully deleted.`)
+        res.redirect("/inv/")
+    } else {
+        req.flash("error", "Sorry, could not delete inventory")
+        res.status(501).redirect(`/inv/delete/${inv_id}`)
     }
 }
 

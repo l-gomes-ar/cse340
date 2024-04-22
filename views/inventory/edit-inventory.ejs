@@ -20,7 +20,7 @@
     <h2><%= locals.inv_make + ' ' + locals.inv_model %> Details</h2>
     <p>All fields are required.</p>
     <hr>
-    <form action="/inv/update/" method="post">
+    <form action="/inv/edit/<%= locals.inv_id %>" method="post">
         <label>Classification: <%- classificationList %></label>
         <label>Make: <input type="text" name="inv_make" placeholder="Min of 3 characters" pattern="[A-Za-z0-9\s]{3,}" required value="<%= locals.inv_make %>"></label>
         <label>Model: <input type="text" name="inv_model" placeholder="Min of 3 characters" pattern="[A-Za-z0-9\s]{3,}" required value="<%= locals.inv_model %>"></label>

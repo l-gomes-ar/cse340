@@ -238,10 +238,11 @@ validate.checkUpdateData = async (req, res, next) => {
 
     let errors = []
     errors = validationResult(req)
+    const invId = req.params.inventory_id
 
     const classificationList = await utilities.buildClassificationList(classification_id)
 
-    if (!errors.isEmpty()) {
+    if (!errors.isEmpty() || invId != inv_id) {
         let nav = await utilities.getNav()
         res.render("./inventory/edit-inventory", {
             errors,
@@ -257,7 +258,44 @@ validate.checkUpdateData = async (req, res, next) => {
             inv_year,
             inv_miles,
             inv_color,
-            inv_id
+            inv_id: invId
+        })
+        return
+    }
+    next()
+}
+
+/* *****************
+ * Check delete inventory data
+ * ***************** */
+validate.checkDeleteData = async (req, res, next) => {
+    const {
+        inv_id,
+        inv_make,
+        inv_model,
+        inv_price,
+        inv_year,
+        inv_miles,
+    } = req.body
+
+    const invId = req.params.inventory_id
+
+    if (invId != inv_id) {
+        if (invId != inv_id) {
+            req.flash("error", "Inventory id must not be changed!")
+        }
+
+        let nav = await utilities.getNav()
+        res.render("./inventory/delete-confirm", {
+            errors: null,
+            title: `Delete ${inv_make} ${inv_model}`,
+            nav,
+            inv_make,
+            inv_model,
+            inv_price,
+            inv_year,
+            inv_miles,
+            inv_id: invId
         })
         return
     }
