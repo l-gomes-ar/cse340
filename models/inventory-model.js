@@ -41,13 +41,17 @@ async function getDetailsByInvId(invId) {
     try {
         const data = await pool.query(
             `SELECT 
-                CONCAT(inv_make, ' ', inv_model) AS inv_name,
+                inv_make,
+                inv_model,
                 inv_year,
                 inv_description,
                 inv_image,
+                inv_thumbnail,
                 inv_price,
                 inv_miles,
-                inv_color
+                inv_color,
+                classification_id,
+                inv_id
             FROM
                 public.inventory
             WHERE
@@ -101,4 +105,46 @@ async function addInventory(classification_id, inv_make, inv_model, inv_descript
     }
 }
 
-module.exports = { getClassifications, getClassificationById, getInventoryByClassificationId, getDetailsByInvId, addClassification, addInventory }
+/* ***********************
+ * Update inventory
+ * *********************** */
+async function updateInventory(classification_id, inv_id, inv_make, inv_model, inv_description, inv_image, inv_thumbnail, inv_price, inv_year, inv_miles, inv_color) {
+    try {
+        const sql = `UPDATE
+                         public.inventory 
+                     SET
+                         classification_id = $1,
+                         inv_make = $2,
+                         inv_model = $3,
+                         inv_description = $4,
+                         inv_image = $5,
+                         inv_thumbnail = $6,
+                         inv_price = $7,
+                         inv_year = $8, 
+                         inv_miles = $9,
+                         inv_color = $10
+                     WHERE
+                         inv_id = $11
+                     RETURNING *`
+
+        const updateResult = await pool.query(sql, [
+            classification_id,
+            inv_make, 
+            inv_model,
+            inv_description,
+            inv_image,
+            inv_thumbnail,
+            inv_price,
+            inv_year,
+            inv_miles,
+            inv_color,
+            inv_id
+        ])
+
+        return updateResult.rows[0];
+    } catch (error) {
+        console.error("updateinventory error " + error)
+    }
+}
+
+module.exports = { getClassifications, getClassificationById, getInventoryByClassificationId, getDetailsByInvId, addClassification, addInventory, updateInventory }

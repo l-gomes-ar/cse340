@@ -68,7 +68,7 @@ Util.buildDetailsGrid = async function(data) {
         grid = `<div class="detailsView">
                     <img src="${data.inv_image}" alt="${data.inv_name} Full Picture">
                     <div>
-                    <h2>${data.inv_name} Details</h2>
+                    <h2>${data.inv_make} ${data.inv_model} Details</h2>
                         <ul>
                             <li><b>Price: $${new Intl.NumberFormat('en-US').format(data.inv_price)}</b></li>
                             <li><b>Description:</b> ${data.inv_description}</li>

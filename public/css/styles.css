@@ -241,21 +241,23 @@ footer {
 .form-field label,
 .form-field input,
 .form-field textarea,
-.form-field select {
+.form-field select,
+.manage-inventory select {
   display: block;
   width: 100%;
 }
 
 .form-field input,
 .form-field textarea,
-.form-field select {
+.form-field select,
+.manage-inventory select {
   margin-bottom: .5rem;
   font-size: 1rem;
   padding: .3rem;
 }
 
 .form-field input[type="submit"] {
-  width: 8rem;
+  width: 10rem;
   font-weight: 700;
   margin: 1rem auto;
   cursor: pointer;
@@ -357,7 +359,7 @@ textarea:invalid:focus::placeholder {
   border-radius: 5px;
 }
 
-/* Styles for management view */
+/* Styles for vehicle management view */
 .management-links {
   background-color: rgba(0, 0, 0, .9);
   margin: 1rem;
@@ -373,4 +375,35 @@ textarea:invalid:focus::placeholder {
 
 .management-links a:hover {
   background-color: rgba(255, 255, 255, .3);
+}
+
+.manage-inventory {
+  background-color: rgba(0, 0, 0, .9);
+  margin: 1rem;
+  padding: 1rem;
+}
+
+.manage-inventory table {
+  background-color: lightgrey;
+  border-collapse: collapse;
+  width: 90%;
+  margin: 1rem auto 0;
+  padding: 1rem;
+  text-align: center;
+}
+
+.manage-inventory td,
+.manage-inventory th {
+  border: 1px solid black;
+  padding: .5rem;
+}
+
+.manage-inventory a {
+  text-decoration: none;
+  color: navy;
+  font-weight: 700;
+}
+
+.manage-inventory tbody tr:nth-child(odd) {
+  background-color: rgba(255, 255, 255, .2);
 }
