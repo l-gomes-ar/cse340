@@ -149,5 +149,41 @@ Util.checkLogin = (req, res, next) => {
     }
 }
 
+/* ****************************
+ * Middleware to check account authorization
+ * **************************** */
+Util.checkAuthorization = (req, res, next) => {
+    if (res.locals.accountData) {
+        const validTypes = ['Employee', 'Admin']
+        
+        if (validTypes.includes(res.locals.accountData.account_type)) {
+            next()
+        } else {
+            req.flash("error", "Please log in with a valid administrator/employee account")
+            return res.redirect("/account/login")
+        }
+    } else {
+        req.flash("notice", "Please log in")
+        return res.redirect("/account/login")
+    }
+}
+
+/* ***********************
+ * Middleware for checking credential to update account
+ * *********************** */
+Util.checkAccountId = async (req, res, next) => {
+    const account_id = parseInt(req.params.account_id)
+    try {
+        if (account_id === res.locals.accountData.account_id) {
+            next()
+        } else {
+            req.flash("error", "Cannot update this account")
+            return res.redirect("/account/")
+        }
+    } catch (error) {
+        req.flash("notice", "Please log in")
+        return res.redirect("/account/login")
+    }
+}
 
 module.exports = Util

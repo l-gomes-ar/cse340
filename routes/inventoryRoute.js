@@ -12,47 +12,51 @@ router.get("/type/:classificationId", util.handleErrors(invController.buildByCla
 router.get("/detail/:invId", util.handleErrors(invController.buildByInvId))
 
 // Route to build management view
-router.get("/", util.handleErrors(invController.buildManagement))
+router.get("/", util.checkAuthorization, util.handleErrors(invController.buildManagement))
 
 // Route to build add new classification view
-router.get("/add-classification", util.handleErrors(invController.buildAddClassification))
+router.get("/add-classification", util.checkAuthorization, util.handleErrors(invController.buildAddClassification))
 
 // Route for sending data for new classification
 router.post(
     "/add-classification",
+    util.checkAuthorization,
     validate.classificationRules(),
     validate.checkClassification,
     util.handleErrors(invController.addClassification)
 )
 
 // Route to build add new inventory view
-router.get("/add-inventory", util.handleErrors(invController.buildAddInventory))
+router.get("/add-inventory", util.checkAuthorization, util.handleErrors(invController.buildAddInventory))
 
 // Route for sending data for new inventory
 router.post(
     "/add-inventory",
+    util.checkAuthorization,
     validate.inventoryRules(),
     validate.checkInventory,
     util.handleErrors(invController.addInventory)
 )
 
 // Route for editing inventory
-router.get("/edit/:inventory_id", util.handleErrors(invController.buildEditInventory))
+router.get("/edit/:inventory_id", util.checkAuthorization, util.handleErrors(invController.buildEditInventory))
 
 // Route for sending data to edit inventory
 router.post(
     "/edit/:inventory_id",
+    util.checkAuthorization,
     validate.newinventoryRules(),
     validate.checkUpdateData,
     util.handleErrors(invController.updateInventory)
 )
 
 // Route for confirmation of deleting inventory
-router.get("/delete/:inventory_id", util.handleErrors(invController.buildDeleteInventory))
+router.get("/delete/:inventory_id", util.checkAuthorization, util.handleErrors(invController.buildDeleteInventory))
 
 // Route for deleting inventory
 router.post(
     "/delete/:inventory_id",
+    util.checkAuthorization,
     validate.checkDeleteData,
     util.handleErrors(invController.deleteInventory)
 )

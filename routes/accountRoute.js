@@ -34,4 +34,35 @@ router.get(
     util.handleErrors(accountController.buildAccountManagement)
 )
 
+// Route to update account details view
+router.get(
+    "/update/:account_id",
+    util.checkLogin,
+    util.checkAccountId,
+    util.handleErrors(accountController.buildUpdateAccount)
+)
+
+// Route to send data to update account details
+router.post(
+    "/update/:account_id",
+    util.checkLogin,
+    util.checkAccountId,
+    validate.updateAccountRules(),
+    validate.checkUpdateData,
+    util.handleErrors(accountController.updateAccount)
+)
+
+// Route to send data to change password
+router.post(
+    "/update-pw/:account_id",
+    util.checkLogin,
+    util.checkAccountId,
+    validate.changePasswordRules(),
+    validate.checkChangePasswordData,
+    util.handleErrors(accountController.changePassword)
+)
+
+// Route to logout
+router.get("/logout/", util.checkLogin, util.handleErrors(accountController.logout))
+
 module.exports = router

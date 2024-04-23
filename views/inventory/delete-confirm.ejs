@@ -4,17 +4,19 @@
     res.redirect('/')
 } %>
 
-<!-- Message  -->
+<!-- Message -->
 <%- messages() %>
 <% if (errors) { %>
-    <ul class="error">
-    <% errors.array().forEach(error => { %>
-        <% if (error.msg !== "Invalid value") { %>
-        <li><%= error.msg %></li>
-        <% } %>
-    <% }) %>
-    </ul>
-<% } %>
+    <% if (errors.array().length > 0) { %>
+        <ul class="error">
+        <% errors.array().forEach(error => { %>
+            <% if (error.msg !== "Invalid value") { %>
+                <li><%= error.msg %></li>
+            <% } %>
+        <% }) %>
+        </ul>
+    <% } %>
+<% } %> 
 
 <div class="form-field">
     <h2><%= locals.inv_make + ' ' + locals.inv_model %> Details</h2>

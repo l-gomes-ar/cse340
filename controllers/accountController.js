@@ -106,6 +106,15 @@ async function accountLogin(req, res) {
                 res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 })
             }
             return res.redirect("/account/")
+        } else {
+            req.flash("error", "Please, check your credentials and try again.")
+            res.status(400).render("account/login", {
+                title: "Login",
+                nav,
+                errors: null,
+                account_email
+            })
+            return
         }
     } catch (error) {
         return new Error("Access Forbidden")
@@ -119,9 +128,99 @@ async function buildAccountManagement(req, res) {
     let nav = await utilities.getNav()
     res.render("account/", {
         title: "Account Management",
-        nav,
-        errors: null
+        nav
     })
 }
 
-module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccountManagement }
+/* ********************
+ * Build account update view
+ * ******************** */
+async function buildUpdateAccount(req, res) {
+    let nav = await utilities.getNav()
+    try {
+        const accountId = parseInt(req.params.account_id)
+        const data = await accountModel.getAccountById(accountId)
+        
+        if (data) {
+            res.render("account/update", {
+                title: "Update Account Information",
+                nav,
+                errors: null,
+                account_firstname: data.account_firstname,
+                account_lastname: data.account_lastname,
+                account_email: data.account_email,
+                account_id: accountId
+            })
+        } else {
+            req.flash("error", "Not a valid account Id!")
+            return res.redirect("/account/")
+        }
+
+    } catch (error) {
+        return new Error("buildupdateaccount error " + error)
+    }
+}
+
+/* ****************
+ * Process update account details
+ * **************** */
+async function updateAccount(req, res) {
+    const { account_id, account_firstname, account_lastname, account_email } = req.body
+    const accountId = parseInt(account_id)
+    const updateResult = await accountModel.updateAccount(accountId, account_firstname, account_lastname, account_email)
+
+    // Update current jws token with new account data
+    const accountData = await accountModel.getAccountById(accountId)
+    delete accountData.account_password
+    const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 })
+
+    if (process.env.NODE_ENV === "development") {
+        res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 })
+    } else {
+        res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 })
+    }
+
+    if (updateResult) {
+        req.flash("success", "Congratulations, your information has been updated.")
+    } else {
+        req.flash("error", "I'm sorry, could not update your information")
+    }
+    return res.redirect("/account/")
+}
+
+/* ****************
+ * Process change password details
+ * **************** */
+async function changePassword(req, res) {
+    const { account_id, account_password } = req.body
+    const accountId = parseInt(account_id)
+
+    // Hash password before storing 
+    let hashedPassword
+    try {
+        hashedPassword = await bcrypt.hashSync(account_password, 10)
+    } catch (error) {
+        req.flash("error", "Sorry, there was an error processing your password.")
+        return res.status.redirect(`/account/update/${accountId}`)
+    }
+
+    const updateResult = await accountModel.changePassword(accountId, hashedPassword)
+
+    if (updateResult) {
+        req.flash("success", "Congratulations, your password has been updated.")
+    } else {
+        req.flash("error", "I'm sorry, could not update your password")
+    }
+    return res.redirect("/account/")
+}
+
+/* *********************
+ * Log Out user
+ * ********************* */
+function logout(req, res) {
+    res.clearCookie("jwt")
+    req.flash("notice", "Logged out.")
+    return res.redirect("/")
+}
+
+module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccountManagement, buildUpdateAccount, updateAccount, changePassword, logout }
