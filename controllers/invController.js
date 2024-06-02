@@ -30,16 +30,43 @@ invCont.buildByClassificationId = async function (req, res, next) {
  * ********************************** */
 invCont.buildByInvId = async function (req, res, next) {
     const invId = req.params.invId;
+    const reviews = await utilities.buildReviewsList(invId);
     const data = await invModel.getDetailsByInvId(invId)
     const grid = await utilities.buildDetailsGrid(data)
     let nav = await utilities.getNav()
     const vehicleName = `${data.inv_year} ${data.inv_make} ${data.inv_model}`
     res.render("./inventory/details", {
+        errors: null,
         title: vehicleName,
+        invId,
         nav,
-        grid
+        grid,
+        reviews
     })
 }
+
+
+/* **********************************
+ * Add Review page by inventory id view
+ * ********************************** */
+invCont.addReview = async function (req, res, next) {
+    const { review_text, account_id, inv_id } = req.body
+
+    const result = await invModel.addReview(
+        review_text,
+        account_id,
+        inv_id
+    )
+
+    if (result) {
+        req.flash("success", "Review added.")
+        res.status(201).redirect(`/inv/detail/${req.params.invId}`)
+    } else {
+        req.flash("error", "Sorry, could not add review.")
+        res.status(501).redirect(`/inv/detail/${req.params.invId}`)
+    }
+}
+
 
 /* **********************************
  * Build management view
@@ -180,7 +207,6 @@ invCont.getInventoryJSON = async (req, res, next) => {
         next(new Error("No data returned"))
     }
 }
-
 
 /* **********************************
  * Build view for editing inventory 

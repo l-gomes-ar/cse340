@@ -7,6 +7,37 @@
 
 <!-- Message -->
 <%- messages() %>
+<% if (errors) { %>
+    <% if (errors.array().length > 0) { %>
+        <ul class="error">
+        <% errors.array().forEach(error => { %>
+            <% if (error.msg !== "Invalid value") { %>
+                <li><%= error.msg %></li>
+            <% } %>
+        <% }) %>
+        </ul>
+    <% } %>
+<% } %> 
 
 <!-- Detail Items Display -->
 <%- grid %>
+
+<!-- Review Display -->
+<%- reviews %>
+
+<!-- Add Review Form -->
+<div class="add-review">
+    <h3>Add Review</h3>
+    <% if (locals.loggedin) { %>
+        <form action="/inv/detail/<%- invId %>" class="form-field" method="post">
+            <label>Screen Name: <input type="text" readonly value="<%- locals.accountData.account_firstname[0] + locals.accountData.account_lastname %>"></label>
+            <label>Review: <textarea name="review_text" rows="6" required></textarea></label>
+            <input type="hidden" name="inv_id" value="<%- invId %>">
+            <input type="hidden" name="account_id" value="<%- locals.accountData.account_id %>">
+            <input type="submit" value="Submit Review">
+        </form>
+    <% } else { %>
+        <p class="notice">You must be logged in to add a review. <a href="/account/login">Log In</a></p>
+
+    <% } %>
+</div>

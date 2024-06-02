@@ -39,6 +39,13 @@
         font-size: 16pt;
     }
 
+    /* Styles for flash messages */
+    .notice,
+    .success,
+    .error {
+        font-size: 16pt;
+    }
+
     /* Page Sizing Style */
     main {
         width: auto;
@@ -78,6 +85,20 @@
         margin-top: 0;
     }
 
+    /* Styles for Reviews List in Details */
+    #reviews-container {
+        & h3 {
+            font-size: 20pt;
+        }
+    }
+
+    /* Styles for Add Review */
+    .add-review {
+        & h3 {
+            font-size: 20pt;
+        }
+    }
+
     /* Styles for Login form */
     .form-field {
         width: 65%;
@@ -86,5 +107,16 @@
 
     .form-field label {
         font-size: 16pt;
+    }
+
+    /* Styles for account management */
+    .account-management {
+        & h2 {
+            font-size: 20pt;
+        }
+        & p,
+        & a {
+            font-size: 16pt;
+        }
     }
 }

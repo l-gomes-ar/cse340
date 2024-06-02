@@ -302,4 +302,62 @@ validate.checkDeleteData = async (req, res, next) => {
     next()
 }
 
+
+/* ************************
+ * Add Review data validation rules
+ * ************************ */
+validate.addReviewRules = () => {
+    return [
+        body("review_text")
+            .trim()
+            .notEmpty()
+            .escape()
+            .withMessage("Review cannot be empty."),
+        body("inv_id")
+            .trim()
+            .notEmpty()
+            .isInt()
+            .withMessage("Inventory Id must be the existing value! Do not edit it!"),
+        body("account_id")
+            .trim()
+            .notEmpty()
+            .isInt()
+            .withMessage("Account Id must be the existing value! Do not edit it!")
+    ]
+}
+
+/* ************************
+ * Check review data and return errors or continue to add new review
+ * ************************ */
+validate.checkReviewData = async (req, res, next) => {
+    const {
+        inv_id,
+        account_id
+    } = req.body
+
+    let errors = []
+    errors = validationResult(req)
+    const invId = req.params.invId;
+
+    if (!errors.isEmpty() || invId != inv_id || account_id != res.locals.accountData.account_id) {
+        let nav = await utilities.getNav()
+
+        const reviews = await utilities.buildReviewsList(invId);
+        const data = await invModel.getDetailsByInvId(invId)
+        const grid = await utilities.buildDetailsGrid(data)
+        const vehicleName = `${data.inv_year} ${data.inv_make} ${data.inv_model}`
+        res.render("./inventory/details", {
+            errors,
+            title: vehicleName,
+            invId,
+            nav,
+            grid,
+            reviews
+        })
+
+        return
+    }
+    next()
+}
+
 module.exports = validate

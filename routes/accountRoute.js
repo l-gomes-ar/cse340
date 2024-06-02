@@ -62,6 +62,40 @@ router.post(
     util.handleErrors(accountController.changePassword)
 )
 
+// Route to build edit review view
+router.get(
+    "/edit-review/:review_id",
+    util.checkLogin,
+    util.checkAccountReviewId,
+    util.handleErrors(accountController.buildEditReview)
+)
+
+// Route to edit review
+router.post(
+    "/edit-review/:review_id",
+    util.checkLogin,
+    util.checkAccountReviewId,
+    validate.editReviewRules(),
+    validate.checkEditReview,
+    util.handleErrors(accountController.editReview)
+)
+
+// Route to build delete review view
+router.get(
+    "/delete-review/:review_id",
+    util.checkLogin,
+    util.checkAccountReviewId,
+    util.handleErrors(accountController.buildDeleteReview)
+)
+
+// Route to delete review
+router.post(
+    "/delete-review/:review_id",
+    util.checkLogin,
+    util.checkAccountReviewId,
+    util.handleErrors(accountController.deleteReview)
+)
+
 // Route to logout
 router.get("/logout/", util.checkLogin, util.handleErrors(accountController.logout))
 

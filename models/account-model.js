@@ -124,5 +124,4 @@ async function changePassword(account_id, account_password) {
     }
 }
 
-
 module.exports = { registerAccount, checkExistingEmail, getAccountByEmail, getAccountById, updateAccount, changePassword }

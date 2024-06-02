@@ -1,5 +1,6 @@
 const utilities = require("../utilities/")
 const accountModel = require("../models/account-model")
+const invModel = require("../models/inventory-model")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
@@ -126,9 +127,12 @@ async function accountLogin(req, res) {
  * ******************* */
 async function buildAccountManagement(req, res) {
     let nav = await utilities.getNav()
+    const account_id = res.locals.accountData.account_id
+    let reviews = await utilities.buildReviewsListAccount(account_id)
     res.render("account/", {
         title: "Account Management",
-        nav
+        nav,
+        reviews
     })
 }
 
@@ -223,4 +227,113 @@ function logout(req, res) {
     return res.redirect("/")
 }
 
-module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccountManagement, buildUpdateAccount, updateAccount, changePassword, logout }
+/* ********************
+ * Build edit review view
+ * ******************** */
+async function buildEditReview(req, res) {
+    let nav = await utilities.getNav()
+    try {
+        const reviewId = parseInt(req.params.review_id)
+        const data = await invModel.getReviewById(reviewId)
+        
+        if (data) {
+            res.render("account/edit-review", {
+                title: `Edit ${data.inv_name} Review`,
+                nav,
+                errors: null,
+                review_id: reviewId,
+                review_date: data.review_date,
+                review_text: data.review_text
+            })
+        } else {
+            req.flash("error", "Not a valid review Id!")
+            return res.redirect("/account/")
+        }
+
+    } catch (error) {
+        return new Error("buildeditreview error " + error)
+    }
+}
+
+/* ********************
+ * Process edit review
+ * ******************** */
+async function editReview(req, res) {
+    const review_id = req.params.review_id
+    const { review_text } = req.body
+    const result = await invModel.editReview(review_id, review_text)
+    try {
+        if (result) {
+            req.flash("success", "Review updated.")
+            return res.redirect("/account/")
+        } else {
+            req.flash("error", "Could not edit this review")
+            return res.redirect(`/account/edit-review/${review_id}`)
+        }
+    } catch (error) {
+        return new Error("editreview error " + error)
+    }
+}
+
+/* ********************
+ * Build delete review view
+ * ******************** */
+async function buildDeleteReview(req, res) {
+    let nav = await utilities.getNav()
+    try {
+        const reviewId = parseInt(req.params.review_id)
+        const data = await invModel.getReviewById(reviewId)
+        
+        if (data) {
+            res.render("account/delete-review", {
+                title: `Delete ${data.inv_name} Review`,
+                nav,
+                errors: null,
+                review_id: reviewId,
+                review_date: data.review_date,
+                review_text: data.review_text
+            })
+        } else {
+            req.flash("error", "Not a valid review Id!")
+            return res.redirect("/account/")
+        }
+
+    } catch (error) {
+        return new Error("builddeletereview error " + error)
+    }
+}
+
+/* ********************
+ * Process delete review
+ * ******************** */
+async function deleteReview(req, res) {
+    const review_id = req.params.review_id
+    const result = await invModel.deleteReview(review_id)
+    try {
+        if (result) {
+            req.flash("success", "Review deleted.")
+            return res.redirect("/account/")
+        } else {
+            req.flash("error", "Could not delete this review")
+            return res.redirect(`/account/delete-review/${review_id}`)
+        }
+    } catch (error) {
+        return new Error("deletereview error " + error)
+    }
+}
+
+module.exports = { 
+    buildLogin,
+    buildRegister,
+    registerAccount,
+    accountLogin,
+    buildAccountManagement,
+    buildUpdateAccount,
+    updateAccount,
+    changePassword,
+    logout,
+    buildEditReview,
+    editReview,
+    buildDeleteReview,
+    deleteReview
+}

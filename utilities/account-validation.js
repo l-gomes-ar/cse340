@@ -2,6 +2,7 @@ const utilities = require(".")
 const { body, validationResult } = require("express-validator")
 const validate = {}
 const accountModel = require("../models/account-model")
+const invModel = require("../models/inventory-model")
 
 /* ************************
  * Registration data validation rules
@@ -244,6 +245,44 @@ validate.checkChangePasswordData = async (req, res, next) => {
             account_email: data.account_email,
             account_id
         })
+        return
+    }
+    next()
+}
+
+/* ************************
+ * Edit Review data validation rules
+ * ************************ */
+validate.editReviewRules = () => {
+    return [
+        body("review_text")
+            .trim()
+            .notEmpty()
+            .escape()
+            .withMessage("Review text cannot be empty.")
+    ]
+}
+
+/* ************************
+ * Check review data and return errors or continue to edit review
+ * ************************ */
+validate.checkEditReview = async (req, res, next) => {
+    let errors = []
+    errors = validationResult(req)
+
+    if (!errors.isEmpty()) {
+        let nav = await utilities.getNav()
+        const reviewId = parseInt(req.params.review_id)
+        const data = await invModel.getReviewById(reviewId)
+        res.render("account/edit-review", {
+            title: `Edit ${data.inv_name} Review`,
+            nav,
+            errors,
+            review_id: reviewId,
+            review_date: data.review_date,
+            review_text: data.review_text
+        })
+
         return
     }
     next()

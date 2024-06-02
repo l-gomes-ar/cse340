@@ -83,6 +83,50 @@ Util.buildDetailsGrid = async function(data) {
     return grid
 }
 
+/* ***********************
+ * Build the reviews list in the details view HTML
+ * *********************** */
+Util.buildReviewsList = async function (inv_id) {
+    const data = await invModel.getReviews(inv_id)
+    let reviews = `<div id="reviews-container"><h3>Customer Reviews</h3>`
+    if (data.length > 0) {
+        reviews += `<ul class="reviews">`
+        data.forEach(review => {
+            reviews += `<li class="review-item">
+                            <p><b>${review.name}</b> wrote on <em>${review.date}</em>:</p>
+                            <p>${review.text}</p>
+                        </li>`
+        })
+        reviews += `</ul>`
+    } else {
+        reviews += '<p class="notice">No reviews found for this vehicle. Be the first to review it!</p>'
+    }
+    reviews += `</div>`
+    return reviews
+}
+
+/* ***********************
+ * Build the reviews list in the account management view HTML
+ * *********************** */
+Util.buildReviewsListAccount = async function (account_id) {
+    const data = await invModel.getReviewsByAccountId(account_id)
+    let reviews = `<div id="reviews-container"><h3>My Reviews</h3>`
+    if (data.length > 0) {
+        reviews += `<ol class="reviews">`
+        data.forEach(review => {
+            reviews += `<li class="review-item">
+                            <p>Reviewed the ${review.inv} on ${review.date} | <a href="/account/edit-review/${review.review_id}">Edit</a> | <a href="/account/delete-review/${review.review_id}">Delete</a></p>
+                        </li>`
+        })
+        reviews += `</ol>`
+    } else {
+        reviews += '<p class="notice">You have not written any reviews yet.</p>'
+    }
+    reviews += `</div>`
+    return reviews
+}
+
+
 /* ****************************
  * Build classification list
  * **************************** */
@@ -177,12 +221,32 @@ Util.checkAccountId = async (req, res, next) => {
         if (account_id === res.locals.accountData.account_id) {
             next()
         } else {
-            req.flash("error", "Cannot update this account")
+            req.flash("error", "Not authorised.")
             return res.redirect("/account/")
         }
     } catch (error) {
         req.flash("notice", "Please log in")
         return res.redirect("/account/login")
+    }
+}
+
+
+/* ***********************
+ * Middleware for checking credential to update review
+ * *********************** */
+Util.checkAccountReviewId = async (req, res, next) => {
+    const review_id = parseInt(req.params.review_id)
+    const data = await invModel.getReviewById(review_id)
+    try {
+        if (data.account_id === res.locals.accountData.account_id) {
+            next()
+        } else {
+            req.flash("error", "Not authorised.")
+            return res.redirect("/account/")
+        }
+    } catch (error) {
+        req.flash("error", "Not a valid review.")
+        return res.redirect("/account/")
     }
 }
 

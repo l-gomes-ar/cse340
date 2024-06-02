@@ -1,0 +1,29 @@
+<% if (title) { %>
+    <h1><%= title %></h1>
+<% } else { 
+    res.redirect('/')
+} %>
+
+<!-- Message -->
+<%- messages() %>
+<% if (errors) { %>
+    <% if (errors.array().length > 0) { %>
+        <ul class="error">
+        <% errors.array().forEach(error => { %>
+            <% if (error.msg !== "Invalid value") { %>
+                <li><%= error.msg %></li>
+            <% } %>
+        <% }) %>
+        </ul>
+    <% } %>
+<% } %> 
+
+<div class="form-field">
+    <form action="/account/edit-review/<%= locals.review_id %>" method="post">
+        <label>Review Date: <input type="text" readonly value="<%- locals.review_date %>"></label>
+        <label>Review Text: <textarea name="review_text" rows="6" required><%- locals.review_text %></textarea></label>
+        <input type="submit" value="Update" disabled>
+    </form>
+</div>
+
+<script src="/js/remove-disabled.js"></script>

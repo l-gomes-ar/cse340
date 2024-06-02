@@ -11,6 +11,15 @@ router.get("/type/:classificationId", util.handleErrors(invController.buildByCla
 // Route to build view for the details by inventory id
 router.get("/detail/:invId", util.handleErrors(invController.buildByInvId))
 
+// Route to add review to details view
+router.post(
+    "/detail/:invId",
+    util.checkLogin,
+    validate.addReviewRules(),
+    validate.checkReviewData, 
+    util.handleErrors(invController.addReview)
+)
+
 // Route to build management view
 router.get("/", util.checkAuthorization, util.handleErrors(invController.buildManagement))
 

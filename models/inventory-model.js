@@ -161,5 +161,168 @@ async function deleteInventory(inv_id) {
     }
 }
 
+/* **************************
+ * Get all reviews by inventory_id
+ * ************************** */
+async function getReviews(inv_id) {
+    try {
+        const data = await pool.query(
+            `SELECT 
+                CONCAT(LEFT(account_firstname, 1), account_lastname) AS name,
+                    TO_CHAR(review_date, 'fmMonth DD, YYYY') AS date,
+                    review_text AS text
+                FROM 
+                    public.review AS r
+                JOIN 
+                    public.inventory AS i
+                    ON r.inv_id = i.inv_id
+                JOIN
+                    public.account as a
+                    ON r.account_id = a.account_id
+                WHERE
+                    r.inv_id = $1
+                ORDER BY
+                    review_date DESC, review_id DESC;`,
+            [inv_id]
+        )
 
-module.exports = { getClassifications, getClassificationById, getInventoryByClassificationId, getDetailsByInvId, addClassification, addInventory, updateInventory, deleteInventory }
+        return data.rows
+    } catch (error) {
+        console.error("getreviews error " + error)
+    }
+}
+
+/* **************************
+ * Add review
+ * ************************** */
+async function addReview(review_text, account_id, inv_id) {
+    try {
+        const sql = `INSERT INTO public.review 
+                        (review_text, account_id, inv_id)
+                        VALUES ($1, $2, $3)`
+
+        const result = await pool.query(sql, [
+            review_text,
+            account_id,
+            inv_id
+        ])
+
+        return result;
+    } catch (error) {
+        console.error("addreview error " + error)
+    }
+}
+
+/* *****************
+ * Return reviews using account id
+ * ***************** */
+async function getReviewsByAccountId(account_id) {
+    const sql = `SELECT 
+                    CONCAT(inv_year, ' ', inv_make, ' ', inv_model) AS inv,
+                    review_id,
+                    TO_CHAR(review_date, 'fmMonth DD, YYYY') AS date
+                FROM 
+                    public.review AS r
+                JOIN
+                    public.inventory AS i
+                ON
+                    r.inv_id = i.inv_id
+                WHERE
+                    r.account_id = $1
+                ORDER BY
+                    r.review_date DESC, r.review_id DESC;`
+    try {
+        const result = await pool.query(
+            sql,
+            [account_id]
+        )
+        return result.rows
+    } catch (error) {
+        return new Error("getreviewsbyaccountid error " + error)
+    }
+}
+
+/* *****************
+ * Return review by review id
+ * ***************** */
+async function getReviewById(review_id) {
+    const sql = `SELECT 
+                    CONCAT(inv_year, ' ', inv_make, ' ', inv_model) AS inv_name,
+                    TO_CHAR(review_date, 'fmMonth DD, YYYY') AS review_date,
+                    review_text,
+                    account_id
+                FROM 
+                    public.review AS r
+                JOIN
+                    public.inventory AS i
+                ON
+                    r.inv_id = i.inv_id
+                WHERE
+                    r.review_id = $1;`
+    try {
+        const result = await pool.query(
+            sql,
+            [review_id]
+        )
+        return result.rows[0]
+    } catch (error) {
+        return new Error("getreviewsbyid error " + error)
+    }
+}
+
+/* *****************
+ * Update review by review id
+ * ***************** */
+async function editReview(review_id, review_text) {
+    const sql = `UPDATE 
+                    public.review
+                SET 
+                    review_text = $1
+                WHERE
+                    review_id = $2`
+    try {
+        const result = await pool.query(
+            sql,
+            [review_text, review_id]
+        )
+        return result
+    } catch (error) {
+        return new Error("editreview error " + error)
+    }
+}
+
+/* *****************
+ * Delete review by review id
+ * ***************** */
+async function deleteReview(review_id) {
+    const sql = `DELETE FROM 
+                    public.review
+                WHERE
+                    review_id = $1`
+    try {
+        const result = await pool.query(
+            sql,
+            [review_id]
+        )
+        return result
+    } catch (error) {
+        return new Error("deletereview error " + error)
+    }
+}
+
+module.exports = { 
+    getClassifications,
+    getClassificationById,
+    getInventoryByClassificationId,
+    getDetailsByInvId,
+    addClassification,
+    addInventory,
+    updateInventory,
+    deleteInventory,
+    getReviews,
+    addReview,
+    getReviewsByAccountId,
+    getReviewById,
+    editReview,
+    deleteReview
+}
